@@ -508,8 +508,6 @@ Hoja completa para armas con:
 - **Debounce:** los cambios en inputs se consolidan con un timer de 120ms para reducir llamadas a `document.update`.
 - **`_commitAllDataPathFields()`:** antes de mutar arrays (añadir/eliminar modos o reglas), hace commit de todos los inputs sin blur para evitar pérdida de datos.
 
-> **Bug corregido:** el modo por defecto tenía `stat: "stats.physycai.fuerza"` (typo). Corregido a `"physical.fuerza"`.
-
 ---
 
 ## 16. SpecialStatsSettingsV2 (`apps/special-stats-settings.js`)
@@ -664,19 +662,6 @@ Los grupos solo se muestran con `logLevel=debug` y `debug=true`. Son útiles par
 | `derived`           | `{ xpThreshold, initiative, armorDR }`                             |
 | `ui`                | `{ showLevelUpButton, inCombat, levelUpPending }`                  |
 | `settings`          | `{ sheetTheme, showMagic, showStamina, energyLabel }`              |
-
-### Bug corregido: `radarMax`
-
-En el código original, `buildRadarSVG` calculaba el máximo de la escala radial así:
-```js
-const maxV = Number(SYS_ID?.radarMax) || 20;
-// SYS_ID es el string "isekai-system" → SYS_ID.radarMax siempre undefined → maxV = 20
-```
-El radar ignoraba completamente el valor de `system.radarMax` calculado en `prepareDerivedData`. Corregido a:
-```js
-const maxValue = Number(system?.radarMax) || 20;
-// Se pasa como parámetro explícito a buildRadarSVG
-```
 
 ### `buildRadarSVG` — radar interactivo
 
