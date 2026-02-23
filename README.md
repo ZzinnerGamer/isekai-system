@@ -113,11 +113,11 @@ Foundry ready
 
 ### 4.1 Grupos de estadísticas
 
-| Grupo     | Stats                                              | Recurso derivado |
-|-----------|----------------------------------------------------|------------------|
-| Físico    | Fuerza, Agilidad, Constitución, Fortaleza, Destreza | HP (Constitución), Aguante ((Agi+Sab)/2) |
-| Mental    | Inteligencia, Sabiduría, Voluntad, Conocimiento, Carisma | Magia (Voluntad) |
-| Especial  | Configurable por el GM (ej. Fuego, Necromancia…)   | —                |
+| Grupo     | Stats                                                    | Recurso derivado                          |
+|-----------|----------------------------------------------------------|-------------------------------------------|
+| Físico    | Fuerza, Agilidad, Constitución, Fortaleza, Destreza      | HP (Constitución), Aguante ((Agi+Sab)/2)  |
+| Mental    | Inteligencia, Sabiduría, Voluntad, Conocimiento, Carisma | Magia (Voluntad)                          |
+| Especial  | Configurable por el GM (ej. Fuego, Necromancia…)         | —                                         |
 
 ### 4.2 Fórmula de stat total
 
