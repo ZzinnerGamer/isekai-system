@@ -28,8 +28,6 @@
 
 **Isekai System** es un sistema de juego de rol de fantasía ambientado en un mundo de "isekai" (otro mundo). Los personajes tienen estadísticas físicas, mentales y especiales que crecen con el nivel, y el sistema calcula automáticamente valores derivados, arquetipos y recursos.
 
-El sistema corre sobre **Foundry VTT v13** usando la API ApplicationV2 / DocumentSheetV2 y ESModules.
-
 ---
 
 ## 2. Estructura del proyecto
