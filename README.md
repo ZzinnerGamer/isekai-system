@@ -650,20 +650,20 @@ Los grupos solo se muestran con `logLevel=debug` y `debug=true`. Son útiles par
 
 | Clave               | Contenido                                                          |
 |---------------------|--------------------------------------------------------------------|
-| `actor`             | `{ id, name, img, type }`                                         |
-| `system`            | `actor.system` completo                                           |
+| `actor`             | `{ id, name, img, type }`                                          |
+| `system`            | `actor.system` completo                                            |
 | `raceItem`          | Item de ancestría encontrado (o `null`)                            |
 | `backgroundItem`    | Item de origen encontrado (o `null`)                               |
-| `lists.physical`    | Stats físicas con `{ id, name, color, base, value, path }`        |
+| `lists.physical`    | Stats físicas con `{ id, name, color, base, value, path }`         |
 | `lists.mental`      | Stats mentales con el mismo shape                                  |
 | `lists.special`     | Stats especiales activas                                           |
 | `lists.inventory`   | `{ weapons, armor, equipment, consumables, treasure, containers }` |
 | `lists.specials`    | `{ spells, skills }`                                               |
 | `lists.passives`    | Array de items de tipo `passive`                                   |
 | `lists.effects`     | Array de items de tipo `effect`                                    |
-| `resources`         | `{ hp, magic, stamina }` con `{ value, max }`                     |
-| `radar`             | `{ physical, mental, special }` — HTML strings SVG                |
-| `derived`           | `{ xpThreshold, initiative, armorDR }`                            |
+| `resources`         | `{ hp, magic, stamina }` con `{ value, max }`                      |
+| `radar`             | `{ physical, mental, special }` — HTML strings SVG                 |
+| `derived`           | `{ xpThreshold, initiative, armorDR }`                             |
 | `ui`                | `{ showLevelUpButton, inCombat, levelUpPending }`                  |
 | `settings`          | `{ sheetTheme, showMagic, showStamina, energyLabel }`              |
 
@@ -679,10 +679,6 @@ El radar ignoraba completamente el valor de `system.radarMax` calculado en `prep
 const maxValue = Number(system?.radarMax) || 20;
 // Se pasa como parámetro explícito a buildRadarSVG
 ```
-
-### Código muerto eliminado
-
-El archivo original contenía **dos versiones anteriores de `_prepareContext`** dentro de bloques `/* ... */` (≈230 líneas en total). Ambas se han eliminado; la versión activa es la tercera.
 
 ### `buildRadarSVG` — radar interactivo
 
@@ -725,10 +721,10 @@ registerHooks()
 
 **Dos hooks de chat, propósitos distintos:**
 
-| Hook | Archivo | Propósito |
-|------|---------|-----------|
-| `renderChatMessageHTML` | `chat.js` | Engancha el click en cards `[data-isekai-roll="percent"]` para mostrar un Dialog simple |
-| `renderChatMessage` | `index.js` | Añade clase CSS y un click listener que abre `openPercentRollDetails` con el desglose completo desde los flags del mensaje |
+| Hook                    | Archivo    | Propósito                                                                                                                  |
+|-------------------------|------------|----------------------------------------------------------------------------------------------------------------------------|
+| `renderChatMessageHTML` | `chat.js`  | Engancha el click en cards `[data-isekai-roll="percent"]` para mostrar un Dialog simple                                    |
+| `renderChatMessage`     | `index.js` | Añade clase CSS y un click listener que abre `openPercentRollDetails` con el desglose completo desde los flags del mensaje |
 
 `openPercentRollDetails` lee `flags.[SYS_ID].percentRoll` del ChatMessage y construye un Dialog con la fórmula completa: base stat, d100, breakdown de bonuses por fuente, total y resultado final.
 
@@ -758,65 +754,21 @@ xp cambia
             └─ Escribe levelUp.{ pending, remaining, targetLevel, picks, impulseOffer }
 ```
 
-> **Refactoring:** `impulseValueForLevel` era una copia local de `decadeSpike` (`rules/growth.js`). Eliminada y sustituida por el import directo.
-
-> **Nota API:** `Math.clamp` es una extensión de Foundry VTT, no existe en JS estándar. Si alguna vez se porta el código fuera de Foundry, hay que reemplazarlo por `Math.min(Math.max(v, min), max)`.
-
 **`createItem` / `deleteItem`** — Re-renderizan la ficha del actor propietario cuando cambia su colección de items embebidos. Filtran por `documentName === "Actor"` y `type === "character"`.
-
-### 22.3 `hooks/item.js`
-
-**`registerItemHooks` — `preCreateItem`**
-
-Para items de tipo `ancestry` u `origin`, inyecta la estructura de modificadores vacía antes de que el item se persista en base de datos.
-
-> **Formato corregido:** el código original sembraba `statBonuses` (formato legacy). Corregido al formato canónico `modifiers`:
-> ```js
-> // Antes (legacy, ya no usado):
-> { statBonuses: { flat: {}, growthPct: {} } }
->
-> // Después (canónico):
-> { modifiers: { flat: {}, percent: {} } }
-> ```
-
-**`registerTitleHooks` — ⚠ CÓDIGO INACTIVO**
-
-Esta función registra hooks `createItem`/`deleteItem` para items de tipo `"title"` que sincronizan un catálogo `system.titles` en el actor. **El tipo `"title"` no existe en `system.json`**, por lo que estos hooks nunca se dispararán.
-
-Para activarlos, añadir a `system.json`:
-```json
-"documentTypes": {
-  "Item": {
-    "title": {}
-  }
-}
-```
-
-La estructura que gestiona es:
-```js
-system.titles = {
-  "nombre-del-titulo": {
-    slug:            "nombre-del-titulo",
-    name:            "Nombre del Título",
-    obtainedAtLevel: 15,
-    grantedRanks:    0
-  }
-}
-```
 
 ---
 
-## 23. Buenas prácticas y TODOs
+## 23. TODOs
 
 ### Pendientes anotados en el código
 
-| Archivo | Pendiente |
-|---------|-----------|
-| `item-defaults.js` | Todos los tipos tienen campos `"TODO"` (spell: tradition, dc, attack) |
-| `percent-roll.js` | `getPercentRollBonuses` aún no recorre items/effects directamente (usa el cache del rule-engine) |
-| `actor.js` | `maxFromImpulses = 0` — pendiente conectar la tabla real de impulsos a `radarMax` |
-| `rule-engine.js` | Solo procesa reglas `key === "PercentRollBonus"` — extensible a otros tipos |
-| `weapon-sheet.js` | `ctx.statKeys` tiene una lista hardcoded en desuso — ya usa `getAllStatKeys()` vía `scalingOptions` |
+| Archivo            |                                         Pendiente                                                   |
+|--------------------|-----------------------------------------------------------------------------------------------------|
+| `item-defaults.js` | Todos los tipos tienen campos `"TODO"` (spell: tradition, dc, attack)                               |
+| `percent-roll.js`  | `getPercentRollBonuses` aún no recorre items/effects directamente (usa el cache del rule-engine)    |
+| `actor.js`         | `maxFromImpulses = 0` — pendiente conectar la tabla real de impulsos a `radarMax`                   |
+| `rule-engine.js`   | Solo procesa reglas `key === "PercentRollBonus"` — extensible a otros tipos                         |
+| `weapon-sheet.js`  | `ctx.statKeys` tiene una lista hardcoded en desuso — ya usa `getAllStatKeys()` vía `scalingOptions` |
 
 ### Extensión del rule-engine
 
