@@ -1,0 +1,54 @@
+{
+  "id": "isekai-system",
+  "title": "Isekai System",
+  "description": "Isekai System",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Zinner"
+    }
+  ],
+  "esmodules": [
+    "module/isekai.mjs"
+  ],
+  "styles": [
+    { "src": "styles/isekai-system-v2.css" }
+  ],
+  "packs": [],
+  "languages": [
+    {
+      "lang": "es",
+      "name": "Español",
+      "path": "lang/es.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "character": {}
+    },
+    "Item": {
+      "ancestry": {},
+      "origin": {},
+      "weapon": {},
+      "armor": {},
+      "accessory": {},
+      "consumable--": {},
+      "treasure--": {},
+      "container--": {},
+      "spell+-": {},
+      "skill+-": {},
+      "passive+-": {},
+      "effect+-": {},
+      "title": {}
+    }
+  }
+}
